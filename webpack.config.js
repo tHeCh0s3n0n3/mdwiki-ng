@@ -6,7 +6,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const InlineChunkHtmlPlugin = require('inline-chunk-html-plugin');
 const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default; // Require the plugin
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const PATHS = {
   src: path.join(__dirname, 'src'),
