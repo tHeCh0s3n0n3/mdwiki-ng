@@ -29,6 +29,7 @@
     "html-inline-css-webpack-plugin": "^1.9.0",
     "html-webpack-plugin": "^4.5.0",
     "inline-chunk-html-plugin": "^1.1.1",
+    "marked": "^1.2.3",
     "mini-css-extract-plugin": "^1.2.1",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "style-loader": "^2.0.0",
