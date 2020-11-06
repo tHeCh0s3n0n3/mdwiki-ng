@@ -9,7 +9,13 @@
   },
   "author": "Tarek Fadel",
   "readme": "README.md",
-  "license": "GPLv3",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "url": "https://github.com/tHeCh0s3n0n3/mdwiki-ng"
+  },
+  "bugs": {
+    "url": "https://github.com/tHeCh0s3n0n3/mdwiki-ng/issues"
+  },
   "dependencies": {
     "font-awesome": "^4.7.0",
     "halfmoon": "^1.1.1"
@@ -19,9 +25,7 @@
     "@babel/preset-env": "^7.12.1",
     "babel-loader": "^8.1.0",
     "babel-minify-webpack-plugin": "^0.3.1",
-    "base64-inline-loader": "^1.1.1",
     "css-loader": "^5.0.1",
-    "favicons-webpack-plugin": "^4.2.0",
     "html-inline-css-webpack-plugin": "^1.9.0",
     "html-webpack-plugin": "^4.5.0",
     "inline-chunk-html-plugin": "^1.1.1",
