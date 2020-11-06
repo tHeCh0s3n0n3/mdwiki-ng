@@ -29,7 +29,7 @@ module.exports = {
     new HtmlPlugin(
       {
         inject: true,
-        title: "Halfmoon Test Site!",
+        title: "MDWiki-ng",
         template: path.join(PATHS.src, 'index.tt.html'),
         filename: path.join(PATHS.dist, 'index.html'),
         minify: {
