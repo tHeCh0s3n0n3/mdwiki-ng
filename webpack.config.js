@@ -17,7 +17,8 @@ const PATHS = {
 
 module.exports = {
   entry: path.join(PATHS.src, 'js', 'app.js'),
-  mode: 'production',
+  mode: 'development',
+  //mode: 'production',
   output: {
     publicPath: PATHS.dist,
     path: PATHS.build,
