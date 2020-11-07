@@ -5,4 +5,4 @@ require("font-awesome/css/font-awesome.css");
 // JavaScript
 window.halfmoon = require("halfmoon");
 window.marked = require('marked');
-require("./main.js");
+window.main = require("./main.js");
