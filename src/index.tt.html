@@ -120,7 +120,18 @@
 
             // Get markdown files
             main.fetchNavigation();
-            main.fetchPage("index.md");
+
+            const hash = window.location.hash.substring(1);
+            var fileToFetch = "index.md";
+            if (hash !== null) {
+                // we have a path to work with
+                if (hash[0] === '!' && hash[1] !== hash[2]) {
+                    // We have a properly formatted url
+                    fileToFetch = hash.substring(1);
+                }
+            }
+
+            main.fetchPage(fileToFetch);
         });
     </script>
 </body>
