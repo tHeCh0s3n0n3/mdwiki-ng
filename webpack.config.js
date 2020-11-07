@@ -26,18 +26,18 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
-    new MinifyPlugin(),
+    //new MinifyPlugin(),
     new HtmlPlugin(
       {
         inject: true,
         title: "MDWiki-ng",
         template: path.join(PATHS.src, 'index.tt.html'),
         filename: path.join(PATHS.dist, 'index.html'),
-        minify: {
-          collapseWhitespace: true,
-          keepClosingSlash: true,
-          removeComments: true,
-        },
+        // minify: {
+        //   collapseWhitespace: true,
+        //   keepClosingSlash: true,
+        //   removeComments: true,
+        // },
       }),
     new InlineChunkHtmlPlugin(HtmlPlugin, [/.*/]),
     new HTMLInlineCSSWebpackPlugin(),
