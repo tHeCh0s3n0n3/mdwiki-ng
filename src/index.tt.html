@@ -10,7 +10,23 @@
 
     <!-- Favicon and title -->
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <style type="text/css">
+        .hljs-ln-numbers {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
 
+            border-right: 1px solid #999;
+            vertical-align: top;
+            padding-right: 5px !important;
+        }
+        .hljs-ln-code {
+            padding-left: 10px !important;
+        }
+    </style>
     <!-- Halfmoon CSS -->
     
     <!--
@@ -116,7 +132,7 @@
         document.addEventListener('DOMContentLoaded', (event) => {
             // DOM is finished loading
             halfmoon.onDOMContentLoaded();
-            console.log("Halfmoon loaded!");
+            //console.info("Halfmoon loaded!");
 
             // Get markdown files
             main.fetchNavigation();

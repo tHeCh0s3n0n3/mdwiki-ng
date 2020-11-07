@@ -1,3 +1,4 @@
+const { TAP_KEY_PREFIX } = require('html-inline-css-webpack-plugin/build/types');
 const {
     cleanUrl,
     escape
@@ -5,30 +6,30 @@ const {
 
 var main = {
     fetchNavigation: function() {
-        console.log("Fetching navigation.md");
+        // console.info("Fetching navigation.md");
 
         fetch("navigation.md").then(function(resp) {
             
         
             if (!resp.ok) {
-                console.log(`navigation.md not fetched [${resp.status} - ${resp.statusText}]`);
+                console.warn(`navigation.md not fetched [${resp.status} - ${resp.statusText}]`);
             }
             else {
-                console.log("Fetched navigation.md");
+                // console.info("Fetched navigation.md");
                 resp.text().then(main.renderNavigation, function(reason) {
-                    console.log("Failed to get navigation.md text, reason: " + reason);
+                    console.error("Failed to get navigation.md text, reason: " + reason);
                 });
             }
         }, function(reason) {
-            console.log(`Failed to retrieve navigation.md reason: ${reason}`);
+            console.error(`Failed to retrieve navigation.md reason: ${reason}`);
         });
     },
     
     renderNavigation: function(text) {        
         var marked = require('marked');
 
-        console.log("Received navigation.md text");
-        console.log("Rending navigation.md ...");
+        // console.info("Received navigation.md text");
+        // console.info("Rending navigation.md ...");
 
         const newRenderer = {
             heading(text, level) {
@@ -47,20 +48,20 @@ var main = {
     },
 
     fetchPage: function(url) {
-        console.log("Fetching content from " + url);
+        // console.info("Fetching content from " + url);
 
         fetch(url).then(function(resp) {
-            console.log("Fetched content from " + url);
+            // console.info("Fetched content from " + url);
             resp.text().then(main.renderPage);
         });
     },
     
     renderPage: function(text) {
-        console.log("Showing fetched content");      
+        // console.info("Showing fetched content");      
         var marked = require('marked');
 
-        console.log("Received navigation.md text");
-        console.log("Rending navigation.md ...");
+        // console.info("Received navigation.md text");
+        // console.info("Rending navigation.md ...");
 
         const newRenderer = {
             link(href, title, text) {
@@ -75,6 +76,34 @@ var main = {
             },
             codespan(code){
                 return `<code class="code">${code}</code>`;
+            },
+            code(code, infostring, escaped) {
+                const lang = (infostring || '').match(/\S*/)[0];
+                if (this.options.highlight) {
+                  const out = this.options.highlight(code, lang);
+                  if (out != null && out !== code) {
+                    escaped = true;
+                    code = out;
+                  }
+                }
+            
+                if (!lang) {
+                  return '<div class="card">'
+                         + '<pre class="is-card">'
+                         + '<code>'
+                         + (escaped ? code : escape(code, true))
+                         + '</code></pre></div>';
+                }
+            
+                return '<div class="card">'
+                       + '<h2 class="card-title">' + escape(lang, true) + '</h2>'
+                       + '<pre class="is-card">'
+                       + '<code class="hljs '
+                         + this.options.langPrefix
+                         + escape(lang, true)
+                       + '">'
+                       + (escaped ? code : escape(code, true))
+                       + '</code></pre></div>';
             },
             image(href, title, text) {
                 href = cleanUrl(this.options.sanitize, this.options.baseUrl, href);
@@ -111,9 +140,22 @@ var main = {
             },
 
         };
-        marked.use({renderer: newRenderer});
+        marked.use({
+            renderer: newRenderer,
+            highlight: function(code, language) {
+                const hljs = require('highlight.js');
+                const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
+                //console.info(`hljs lang: ${validLanguage}`);
+                return hljs.highlight(validLanguage, code).value;
+            },
+            smartLists: true,
+            smartypants: true,
+        });
         document.getElementById("content").innerHTML
                     = marked(text);
+
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
     },
 }
 
