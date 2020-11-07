@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
-    "halfmoon": "^1.1.1"
+    "halfmoon": "^1.1.1",
+    "highlight.js": "^10.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -26,6 +27,7 @@
     "babel-loader": "^8.1.0",
     "babel-minify-webpack-plugin": "^0.3.1",
     "css-loader": "^5.0.1",
+    "highlight": "^0.2.4",
     "html-inline-css-webpack-plugin": "^1.9.0",
     "html-webpack-plugin": "^4.5.0",
     "inline-chunk-html-plugin": "^1.1.1",
