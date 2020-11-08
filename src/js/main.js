@@ -1,8 +1,4 @@
-const { TAP_KEY_PREFIX } = require('html-inline-css-webpack-plugin/build/types');
-const {
-    cleanUrl,
-    escape
-  } = require('./helpers.js');
+import { cleanUrl, escape } from './helpers.js';
 
 var main = {
     fetchNavigation: function() {
@@ -26,7 +22,7 @@ var main = {
     },
     
     renderNavigation: function(text) {        
-        var marked = require('marked');
+        const marked = require('marked');
 
         // console.info("Received navigation.md text");
         // console.info("Rending navigation.md ...");
@@ -58,7 +54,7 @@ var main = {
     
     renderPage: function(text) {
         // console.info("Showing fetched content");      
-        var marked = require('marked');
+        const marked = require('marked');
 
         // console.info("Received navigation.md text");
         // console.info("Rending navigation.md ...");
@@ -159,4 +155,4 @@ var main = {
     },
 }
 
-module.exports = main;
+export default main;
