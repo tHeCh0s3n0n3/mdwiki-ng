@@ -1,11 +1,11 @@
 // CSS
-require("halfmoon/css/halfmoon-variables.min.css");
-require("font-awesome/css/font-awesome.css");
-import 'halfmoon-highlight';
+import "halfmoon/css/halfmoon-variables.min.css";
+import "font-awesome/css/font-awesome.css";
+import 'halfmoon-highlight/dist/index.css';
 
 // JavaScript
 window.halfmoon = require("halfmoon");
 window.hljs = require('highlight.js');
 require('highlightjs-line-numbers.js');
 window.marked = require('marked');
-window.main = require("./main.js");
+window.main = require("./main.js").default;
