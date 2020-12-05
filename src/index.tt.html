@@ -13,7 +13,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
         <!-- other browsers -->
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    
+
     <title><%= htmlWebpackPlugin.options.title %></title>
     <style type="text/css">
         .hljs-ln-numbers {
@@ -141,11 +141,10 @@
             halfmoon.onDOMContentLoaded();
             //console.info("Halfmoon loaded!");
 
-            // Get markdown files
-            main.fetchNavigation();
-
             window.addEventListener('hashchange', fetchPageFromHash, false);
 
+            // Get markdown files
+            main.fetchNavigation();
             fetchPageFromHash();
         });
 
@@ -174,6 +173,11 @@
                     item.click();
                 });
             }
+        }
+
+        window.mdwiking.toggleDarkMode = function() {
+            halfmoon.toggleDarkMode();
+            main.renderDarkModeButton();
         }
     </script>
 </body>
