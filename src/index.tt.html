@@ -161,6 +161,14 @@
             }
 
             main.fetchPage(fileToFetch);
+
+            // Close any dropdowns which are open
+            let openDropdowns = document.body.querySelectorAll("li.dropdown.show");
+            if (null != openDropdowns) {
+                openDropdowns.forEach(item => {
+                    item.click();
+                });
+            }
         }
     </script>
 </body>
