@@ -1,6 +1,6 @@
 // CSS
 import "halfmoon/css/halfmoon-variables.min.css";
-import "font-awesome/css/font-awesome.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 import 'halfmoon-highlight/dist/index.css';
 
 // JavaScript

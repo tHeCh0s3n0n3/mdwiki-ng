@@ -17,7 +17,7 @@
     "url": "https://github.com/tHeCh0s3n0n3/mdwiki-ng/issues"
   },
   "dependencies": {
-    "font-awesome": "^4.7.0",
+    "@fortawesome/fontawesome-free": "^5.15.1",
     "halfmoon": "^1.1.1",
     "halfmoon-highlight": "^1.0.1",
     "highlight.js": "^10.3.2",

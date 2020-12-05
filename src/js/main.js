@@ -110,7 +110,7 @@ var main = {
         // Add the Halfmoon darkmode toggle button
         result += `<div class="navbar-content ml-auto">`;
         result += `<button class="btn btn-action" type="button" aria-label="Toggle dark mode" onclick="window.mdwiking.toggleDarkMode()">`;
-        result += `<i id="mdwiki-ng_darkmode_icon" class="fa fa-moon-o" style="color: yellow" area-hidden="true"></i>`;
+        result += `<i id="mdwiki-ng_darkmode_icon" class="fas fa-moon" style="color: yellow" area-hidden="true"></i>`;
         result += `</button>`;
         result += `</div>`;
 
@@ -123,12 +123,12 @@ var main = {
     renderDarkModeButton: function() {
         const icon = document.body.querySelector("#mdwiki-ng_darkmode_icon");
         if (document.body.classList.contains("dark-mode")) {
-            icon.classList.remove("fa-moon-o");
-            icon.classList.add("fa-sun-o");
+            icon.classList.remove("fa-moon");
+            icon.classList.add("fa-sun");
         }
         else {
-            icon.classList.remove("fa-sun-o");
-            icon.classList.add("fa-moon-o");
+            icon.classList.remove("fa-sun");
+            icon.classList.add("fa-moon");
         }
     },
 
