@@ -174,7 +174,17 @@ var main = {
                 const titleAttrib = (title !== null)
                                     ? ` title="${title}"`
                                     : '';
-                return `<a href="${escape(href)}" class="hyperlink-underline"${titleAttrib}>${text}</a>`;
+
+                const baseUrl = `${location.protocol}//${location.hostname}:${location.port}`;
+                const url = new URL(href, baseUrl);
+                const urlMatch = `${url.protocol}//${url.hostname}:${url.port}`;
+
+                if (urlMatch !== baseUrl) {
+                    return `<a href="${escape(href)}" target="_blank" class="hyperlink-underline"${titleAttrib}>${text}</a>`;
+                }
+                else {
+                    return `<a href="${escape(href)}" class="hyperlink-underline"${titleAttrib}>${text}</a>`;
+                }
             },
             codespan(code){
                 return `<code class="code">${code}</code>`;
