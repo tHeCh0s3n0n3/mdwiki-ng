@@ -70,13 +70,15 @@ var main = {
                         }
                     }
                     if (makeLastTokenManu) {
+                        const replaceRegEx = / /gi;
                         const menuItemToken = token.tokens[token.tokens.length - 1];
+                        const menuItemId = `nav-link-dropdown-toggle-${menuItemToken.text.replaceAll(replaceRegEx, '-')}`;
                         result += `<li class="nav-item dropdown with-arrow">`;
-                        result += `<a class="nav-link" data-toggle="dropdown" id="nav-link-dropdown-toggle">`;
+                        result += `<a class="nav-link" data-toggle="dropdown" id="${menuItemId}">`;
                         result += menuItemToken.text;
                         result += `<i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5= margin-left: 0.5rem (5px) -->`;
-                        result += `</a>`
-                        result += `<div class="dropdown-menu dropdown-menu-right" aria-labelledby="nav-link-dropdown-toggle">`
+                        result += `</a>`;
+                        result += `<div class="dropdown-menu dropdown-menu-center" aria-labelledby="${menuItemId}">`;
                     }
                     break;
                 case "list":
