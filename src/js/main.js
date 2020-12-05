@@ -173,9 +173,9 @@ var main = {
                 if (href === null) {
                     return text;
                 }
-                const titleAttrib = (title !== null)
-                                    ? ` title="${title}"`
-                                    : '';
+                const titleAttrib = (title === null || title === undefined)
+                                    ? ''
+                                    : ` title="${title}"`;
 
                 const baseUrl = `${location.protocol}//${location.hostname}:${location.port}`;
                 const url = new URL(href, baseUrl);
