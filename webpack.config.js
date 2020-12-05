@@ -17,8 +17,8 @@ const PATHS = {
 
 module.exports = {
   entry: path.join(PATHS.src, 'js', 'app.js'),
-  mode: 'development',
-  //mode: 'production',
+  //mode: 'development',
+  mode: 'production',
   output: {
     publicPath: PATHS.dist,
     path: PATHS.build,
@@ -33,11 +33,11 @@ module.exports = {
         title: "MDWiki-ng",
         template: path.join(PATHS.src, 'index.tt.html'),
         filename: path.join(PATHS.dist, 'index.html'),
-        // minify: {
-        //   collapseWhitespace: true,
-        //   keepClosingSlash: true,
-        //   removeComments: true,
-        // },
+        minify: {
+          collapseWhitespace: true,
+          keepClosingSlash: true,
+          removeComments: true,
+        },
       }),
     new InlineChunkHtmlPlugin(HtmlPlugin, [/.*/]),
     new HTMLInlineCSSWebpackPlugin(),
@@ -57,8 +57,8 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          //MiniCssExtractPlugin.loader,
-          'style-loader',
+          MiniCssExtractPlugin.loader,
+          //'style-loader',
           'css-loader',
         ],
       },
@@ -68,12 +68,6 @@ module.exports = {
           'url-loader'
         ],
       },
-      /*{        
-        test: /favicon\.png$/,
-        use: [
-          'file-loader',
-        ]
-      },*/
     ],
   },
   optimization: {
