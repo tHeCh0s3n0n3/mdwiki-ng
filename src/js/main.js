@@ -5,13 +5,11 @@ var main = {
         // console.info("Fetching navigation.md");
 
         fetch("navigation.md").then(function(resp) {
-            
-        
             if (!resp.ok) {
                 console.warn(`navigation.md not fetched [${resp.status} - ${resp.statusText}]`);
             }
             else {
-                // console.info("Fetched navigation.md");
+                //console.info("Fetched navigation.md");
                 resp.text().then(main.renderNavigation, function(reason) {
                     console.error("Failed to get navigation.md text, reason: " + reason);
                 });
@@ -20,27 +18,113 @@ var main = {
             console.error(`Failed to retrieve navigation.md reason: ${reason}`);
         });
     },
-    
-    renderNavigation: function(text) {        
+
+    renderNavigation: function(text) {
         const marked = require('marked');
 
-        // console.info("Received navigation.md text");
-        // console.info("Rending navigation.md ...");
+        let tokens = marked.lexer(text);
 
-        const newRenderer = {
-            heading(text, level) {
-                if (level === 1)
-                return `<a href="#" class="navbar-brand">${text}</a>`;
-            },
-            link(href, title, text) {
-                return `<li class="nav-item">
-                            <a href="${href}" class="nav-link">${text}</a>
-                        </li>`
-            },
-        };
-        marked.use({renderer: newRenderer});
-        document.getElementById("topNavbar").innerHTML
-            = marked(text);
+        let result = "";
+
+        let isList = false;
+        let i = 0;
+        for (let i = 0; i < tokens.length; i++) {
+            const token = tokens[i];
+
+            switch (token.type) {
+                case "heading":
+                    if (i === 0) {
+                        result += main.renderNavigationHeading(token);
+                    }
+                    result += `<ul class="navbar-nav d-none d-md-flex">`;
+                    break;
+                case "paragraph":
+                    if (isList) {
+                        // close the previous list
+                        result += `</div></li>`;
+                        isList = false;
+                    }
+                    let adjustNextForAmount = 0;
+                    let makeLastTokenManu = false;
+                    // Check if we have a list following the paragraph
+                    let checkListOffset = i+1;
+                    if (tokens.length > checkListOffset) {
+                        let nextToken = tokens[checkListOffset];
+                        if (nextToken.type === "space") {
+                            checkListOffset += 1;
+                            if (tokens.length > checkListOffset) {
+                                nextToken = tokens[checkListOffset];
+                            }
+                        }
+                        if (nextToken.type === "list") {
+                            adjustNextForAmount = checkListOffset - i;
+                            makeLastTokenManu = true;
+                        }
+                    }
+                    for (let j = 0; j < token.tokens.length - (makeLastTokenManu ? 1 : 0); j++) {
+                        const subtoken = token.tokens[j];
+                        switch(subtoken.type) {
+                            case "link":
+                                result += `<li class="nav-item">${main.renderNavigationLink(subtoken, "nav-link")}</li>`;
+                                break;
+                        }
+                    }
+                    if (makeLastTokenManu) {
+                        const menuItemToken = token.tokens[token.tokens.length - 1];
+                        result += `<li class="nav-item dropdown with-arrow">`;
+                        result += `<a class="nav-link" data-toggle="dropdown" id="nav-link-dropdown-toggle">`;
+                        result += menuItemToken.text;
+                        result += `<i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5= margin-left: 0.5rem (5px) -->`;
+                        result += `</a>`
+                        result += `<div class="dropdown-menu dropdown-menu-right" aria-labelledby="nav-link-dropdown-toggle">`
+                    }
+                    break;
+                case "list":
+                    isList = true;
+                    token.items.forEach(listItem => {
+                        let subToken = marked.lexer(listItem.text)[0];
+                        switch (subToken.type) {
+                            case "heading":
+                                result += `<div class="dropdown-content"><i><b>${subToken.text}</b></i></div>`;
+                                break;
+                            case "paragraph":
+                                result += main.renderNavigationLink(subToken.tokens[0], "dropdown-item");
+                                break;
+                        }
+                    });
+                    break;
+                case "hr":
+                    if (isList) {
+                        result += `<div class="dropdown-divider"></div>`;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        result += "</ul>";
+
+        document.getElementById("topNavbar").innerHTML = result;
+    },
+
+    renderNavigationHeading: function(token) {
+        // Also set the page title
+        window.document.title = token.text;
+        window.mdwiking.title = token.text;
+        return `<a href="#" class="navbar-brand">${token.text}</a>`;
+    },
+
+    renderNavigationLink: function(token, linkClass, newWindow = true) {
+        const baseUrl = `${location.protocol}//${location.hostname}`;
+        const url = new URL(token.href, baseUrl);
+        if (`${url.protocol}//${url.hostname}` === baseUrl) {
+            // This is a sub-page, add the #!
+            return `<a href="#!${url.pathname}" class="${linkClass}">${token.text}</a>`;
+        }
+        else {
+            return `<a href="${url.href}" class="${linkClass}" target="${newWindow ? "_blank" : "_self"}">${token.text}</a>`
+        }
     },
 
     fetchPage: function(url) {
@@ -51,15 +135,37 @@ var main = {
             resp.text().then(main.renderPage);
         });
     },
-    
+
     renderPage: function(text) {
-        // console.info("Showing fetched content");      
+        // console.info("Showing fetched content");
         const marked = require('marked');
 
         // console.info("Received navigation.md text");
         // console.info("Rending navigation.md ...");
 
         const newRenderer = {
+            heading(text, level, raw, slugger) {
+                var output = "";
+                const cssFontClass = `font-size-${20 - (level * 2)}`;
+                const cssClass = (level === 1 ? "content-title pb-0 mb-0" : cssFontClass);
+                if (this.options.headerIds) {
+
+                    output = `<h${level} id="${this.options.headerPrefix}${slugger.slug(raw)}"
+                                      class="${cssClass}">
+                                ${text}
+                            </h${level}>\n`;
+                }
+                else {
+                    // ignore IDs
+                    output = `<h${level} class="${cssClass}">${text}</h${level}>\n`;
+                }
+
+                if (level === 1) {
+                    output += this.hr() + '\n';
+                }
+
+                return output;
+            },
             link(href, title, text) {
                 href = cleanUrl(this.options.sanitize, this.options.baseUrl, href);
                 if (href === null) {
@@ -82,7 +188,7 @@ var main = {
                     code = out;
                   }
                 }
-            
+
                 if (!lang) {
                   return '<div class="card">'
                          + '<pre class="is-card">'
@@ -90,10 +196,10 @@ var main = {
                          + (escaped ? code : escape(code, true))
                          + '</code></pre></div>';
                 }
-            
+
                 return '<div class="card">'
-                       + '<h2 class="card-title">' + escape(lang, true) + '</h2>'
-                       + '<pre class="is-card">'
+                       + '<span class="card-title code m-0 p-0">' + escape(lang, true) + '</span>'
+                       + '<pre>'
                        + '<code class="hljs '
                          + this.options.langPrefix
                          + escape(lang, true)
@@ -105,7 +211,7 @@ var main = {
                 href = cleanUrl(this.options.sanitize, this.options.baseUrl, href);
                 if (href === null) {
                     return text;
-                }                
+                }
                 return `<img src="${href}" class="img-fluid" alt="${text}" title="${title}">`;
             },
             list(body, isOrdered, startNumber){
@@ -147,6 +253,11 @@ var main = {
             smartLists: true,
             smartypants: true,
         });
+        const tokens = marked.lexer(text);
+        if (tokens[0].type === "heading") {
+            // also change the title to the new heading
+            window.document.title = `${tokens[0].text} :: ${window.mdwiking.title}`;
+        }
         document.getElementById("content").innerHTML
                     = marked(text);
 

@@ -21,7 +21,8 @@
     "halfmoon": "^1.1.1",
     "halfmoon-highlight": "^1.0.1",
     "highlight.js": "^10.3.2",
-    "highlightjs-line-numbers.js": "^2.8.0"
+    "highlightjs-line-numbers.js": "^2.8.0",
+    "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
