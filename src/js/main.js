@@ -3,14 +3,11 @@ require('./fontawesome.js');
 
 var main = {
     fetchNavigation: function() {
-        // console.info("Fetching navigation.md");
-
         fetch("navigation.md").then(function(resp) {
             if (!resp.ok) {
                 console.warn(`navigation.md not fetched [${resp.status} - ${resp.statusText}]`);
             }
             else {
-                //console.info("Fetched navigation.md");
                 resp.text().then(main.renderNavigation, function(reason) {
                     console.error("Failed to get navigation.md text, reason: " + reason);
                 });
@@ -153,20 +150,13 @@ var main = {
     },
 
     fetchPage: function(url) {
-        // console.info("Fetching content from " + url);
-
         fetch(url).then(function(resp) {
-            // console.info("Fetched content from " + url);
             resp.text().then(main.renderPage);
         });
     },
 
     renderPage: function(text) {
-        // console.info("Showing fetched content");
         const marked = require('marked');
-
-        // console.info("Received navigation.md text");
-        // console.info("Rending navigation.md ...");
 
         const newRenderer = {
             heading(text, level, raw, slugger) {
@@ -282,7 +272,6 @@ var main = {
             highlight: function(code, language) {
                 const hljs = require('highlight.js');
                 const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
-                //console.info(`hljs lang: ${validLanguage}`);
                 return hljs.highlight(code, {language: validLanguage}).value;
             },
             smartLists: true,
