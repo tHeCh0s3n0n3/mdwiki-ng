@@ -171,8 +171,8 @@ var main = {
         const newRenderer = {
             heading(text, level, raw, slugger) {
                 var output = "";
-                const cssFontClass = `font-size-${20 - (level * 2)}`;
-                const cssClass = (level === 1 ? "content-title pb-0 mb-0" : cssFontClass);
+                const cssFontClass = `font-size-${20 - (level)} font-weight-bold`;
+                const cssClass = (level === 1 ? "content-title pb-0 mb-0 font-weight-bold" : cssFontClass);
                 if (this.options.headerIds) {
 
                     output = `<h${level} id="${this.options.headerPrefix}${slugger.slug(raw)}"
