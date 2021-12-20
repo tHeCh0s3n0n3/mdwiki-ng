@@ -1,4 +1,5 @@
 import { cleanUrl, escape } from './helpers.js';
+require('./fontawesome.js');
 
 var main = {
     fetchNavigation: function() {
@@ -76,7 +77,7 @@ var main = {
                         result += `<li class="nav-item dropdown with-arrow">`;
                         result += `<a class="nav-link" data-toggle="dropdown" id="${menuItemId}">`;
                         result += menuItemToken.text;
-                        result += `<i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5= margin-left: 0.5rem (5px) -->`;
+                        result += `<i class="fas fa-angle-down ml-5" aria-hidden="true"></i>`;
                         result += `</a>`;
                         result += `<div class="dropdown-menu dropdown-menu-center" aria-labelledby="${menuItemId}">`;
                     }
@@ -110,7 +111,7 @@ var main = {
         // Add the Halfmoon darkmode toggle button
         result += `<div class="navbar-content ml-auto">`;
         result += `<button class="btn btn-action" type="button" aria-label="Toggle dark mode" onclick="window.mdwiking.toggleDarkMode()">`;
-        result += `<i id="mdwiki-ng_darkmode_icon" class="fas fa-moon" style="color: yellow" area-hidden="true"></i>`;
+        result += `<i id="mdwiki-ng_darkmode_icon" class="fas fa-moon" style="color: yellow;" area-hidden="true"></i>`;
         result += `</button>`;
         result += `</div>`;
 
@@ -282,7 +283,8 @@ var main = {
                 const hljs = require('highlight.js');
                 const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
                 //console.info(`hljs lang: ${validLanguage}`);
-                return hljs.highlight(validLanguage, code).value;
+                //return hljs.highlight(validLanguage, code).value;
+                return hljs.highlight(code, {language: validLanguage}).value;
             },
             smartLists: true,
             smartypants: true,
@@ -293,9 +295,9 @@ var main = {
             window.document.title = `${tokens[0].text} :: ${window.mdwiking.title}`;
         }
         document.getElementById("content").innerHTML
-                    = marked(text);
+                    = marked.parse(text);
 
-        hljs.initHighlightingOnLoad();
+        hljs.highlightAll();
         hljs.initLineNumbersOnLoad();
     },
 }

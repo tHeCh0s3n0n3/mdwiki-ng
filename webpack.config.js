@@ -1,11 +1,9 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCssAssetPlugin = require('optimize-css-assets-webpack-plugin');
-const MinifyPlugin = require('babel-minify-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const HtmlPlugin = require('html-webpack-plugin');
-const InlineChunkHtmlPlugin = require('inline-chunk-html-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default; // Require the plugin
+const HTMLInlineJSWebpackPlugin = require('html-inline-script-webpack-plugin');
 
 const PATHS = {
   src: path.join(__dirname, 'src'),
@@ -26,8 +24,7 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
-    //new MinifyPlugin(),
-    new HtmlPlugin(
+    new HtmlWebpackPlugin(
       {
         inject: true,
         title: "MDWiki-ng",
@@ -39,33 +36,40 @@ module.exports = {
           removeComments: true,
         },
       }),
-    new InlineChunkHtmlPlugin(HtmlPlugin, [/.*/]),
     new HTMLInlineCSSWebpackPlugin(),
+    new HTMLInlineJSWebpackPlugin([
+      /^bundle\.js$/
+    ]),
   ],
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
       },
       {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
           //'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2,
+              sourceMap: true,
+            }
+          }
         ],
       },
       {
         test: /\.(jpe?g|svg|gif|png|eot|woff2?|otf|ttf)$/,
         use: [
-          'url-loader'
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: PATHS.dist
+            }
+          },
         ],
       },
     ],
@@ -75,8 +79,8 @@ module.exports = {
     minimizer: [
       new TerserPlugin ({
         extractComments: false,
+        parallel: true,
       }),
-      new OptimizeCssAssetPlugin(),
     ],
   },
 };

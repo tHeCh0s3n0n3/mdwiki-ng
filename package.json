@@ -1,11 +1,12 @@
 {
   "name": "mdwiki-ng",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "MDWiki - Next Generation",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack build",
+    "buildv": "webpack build --stats verbose"
   },
   "author": "Tarek Fadel",
   "readme": "README.md",
@@ -17,29 +18,27 @@
     "url": "https://github.com/tHeCh0s3n0n3/mdwiki-ng/issues"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "halfmoon": "^1.1.1",
-    "halfmoon-highlight": "^1.0.1",
-    "highlight.js": "^10.3.2",
-    "highlightjs-line-numbers.js": "^2.8.0",
-    "webpack-dev-server": "^3.11.0"
+    "halfmoon-highlight": "^1.0.5",
+    "highlight.js": "^11.3.1",
+    "highlightjs-line-numbers.js": "^2.8.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/preset-env": "^7.12.1",
-    "babel-loader": "^8.1.0",
-    "babel-minify-webpack-plugin": "^0.3.1",
-    "css-loader": "^5.0.1",
-    "html-inline-css-webpack-plugin": "^1.9.0",
-    "html-webpack-plugin": "^4.5.0",
-    "inline-chunk-html-plugin": "^1.1.1",
-    "marked": "^1.2.3",
-    "mini-css-extract-plugin": "^1.2.1",
-    "optimize-css-assets-webpack-plugin": "^5.0.4",
-    "style-loader": "^2.0.0",
-    "terser-webpack-plugin": "^5.0.3",
+    "css-loader": "^6.5.1",
+    "html-inline-css-webpack-plugin": "^1.11.1",
+    "html-inline-script-webpack-plugin": "^2.0.3",
+    "html-webpack-plugin": "^5.5.0",
+    "marked": "^4.0.8",
+    "mini-css-extract-plugin": "^2.4.5",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.0",
     "url-loader": "^4.1.1",
-    "webpack": "^5.4.0",
-    "webpack-cli": "^4.2.0"
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
   }
 }
