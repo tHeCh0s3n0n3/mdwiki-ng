@@ -283,7 +283,6 @@ var main = {
                 const hljs = require('highlight.js');
                 const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
                 //console.info(`hljs lang: ${validLanguage}`);
-                //return hljs.highlight(validLanguage, code).value;
                 return hljs.highlight(code, {language: validLanguage}).value;
             },
             smartLists: true,
