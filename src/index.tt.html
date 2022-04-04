@@ -31,6 +31,21 @@
         .hljs-ln-code {
             padding-left: 10px !important;
         }
+
+        .skip-nav-link {
+            position: absolute;
+            left: 0.5rem;
+            transform: translateY(-120%);
+            transition: transform 200ms ease-in;
+            background: black;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid white;
+            z-index: 1000;
+        }
+        .skip-nav-link:focus {
+            transform: translateY(1rem);
+        }
     </style>
     <!-- Halfmoon CSS -->
 
@@ -47,6 +62,10 @@
 
 <body class="with-custom-webkit-scrollbars with-custom-css-scrollbars" data-dm-shortcut-enabled="true"
     data-set-preferred-mode-onload="true">
+    
+    <!-- Skip navigation link (for keyboard navigation)-->
+    <a href="#content" class="skip-nav-link">Skip Navigation</a>
+
     <!-- Modals go here -->
     <!-- Reference: https://www.gethalfmoon.com/docs/modal -->
 
