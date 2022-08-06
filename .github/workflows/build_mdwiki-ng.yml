@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out your repository using git
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js 16
       uses: actions/setup-node@v2
@@ -37,6 +37,28 @@ jobs:
     - name: Build MDWiki-ng
       run: ./build.sh
     
+    # Upload the index.html artifact for use later
+    - name: Save index.html artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: index.html
+        path: dist/index.html
+        if-no-files-found: error
+  
+  CreateRelease:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download index.html artifact
+      id: download
+      uses: actions/download-artifact@v3
+      with:
+        name: index.html
+        path: ~/
+    
+    - name: Show downloaded artifact
+      run: ls -R
+      working-directory: ~/
+        
     - name: Create Release With Asset
       id: Release-AIO
       uses: Hs1r1us/Release-AIO@v1.0
@@ -44,4 +66,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        asset_files: './dist/index.html'
+        asset_files: ~/index.html
