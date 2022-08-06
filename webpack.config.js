@@ -37,9 +37,10 @@ module.exports = {
         },
       }),
     new HTMLInlineCSSWebpackPlugin(),
-    new HTMLInlineJSWebpackPlugin([
-      /^bundle\.js$/
-    ]),
+    new HTMLInlineJSWebpackPlugin(
+      {
+        scriptMatchPattern: [ /^bundle\.js$/ ]
+      }),
   ],
   module: {
     rules: [
