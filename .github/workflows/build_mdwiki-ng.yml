@@ -19,15 +19,19 @@ jobs:
     name: Build MDWiki and upload artifact
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.get-latest-tag.outputs.tag }}
+      tag: ${{ steps.vars.outputs.tag }}
 
     steps:
     - name: Check out your repository using git
       uses: actions/checkout@v3
     
-    - uses: actions-ecosystem/action-get-latest-tag@v1
-      id: get-latest-tag
-    
+    - name: Get Tag
+      id: vars
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+    - name: Check Tag
+      run: |
+        echo ${{ steps.vars.outputs.tag }}
+
     - name: Use Node.js 16
       uses: actions/setup-node@v3
       with:
