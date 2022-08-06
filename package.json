@@ -1,6 +1,6 @@
 {
   "name": "mdwiki-ng",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "MDWiki - Next Generation",
   "main": "main.js",
   "scripts": {
@@ -32,7 +32,7 @@
     "html-inline-css-webpack-plugin": "^1.11.1",
     "html-inline-script-webpack-plugin": "^2.0.3",
     "html-webpack-plugin": "^5.5.0",
-    "marked": "^4.0.15",
+    "marked": "^4.0.*",
     "mini-css-extract-plugin": "^2.6.0",
     "terser-webpack-plugin": "^5.3.1",
     "webpack": "^5.72.0",
