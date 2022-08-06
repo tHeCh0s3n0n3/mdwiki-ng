@@ -56,11 +56,9 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: mdwiki-output
-        path: ~/
     
     - name: Show downloaded artifact
       run: ls -R
-      working-directory: ~/
         
     - name: Create Release With Asset
       id: Release-AIO
@@ -69,4 +67,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        asset_files: ~/index.html
+        asset_files: index.html
