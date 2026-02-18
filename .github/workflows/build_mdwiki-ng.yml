@@ -8,7 +8,7 @@ on:
       - v[0-9]*
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
-  
+
 # Allow this job to clone the repo and create a page deployment
 permissions:
   contents: write
@@ -23,8 +23,8 @@ jobs:
 
     steps:
     - name: Check out your repository using git
-      uses: actions/checkout@v3
-    
+      uses: actions/checkout@v6
+
     - name: Get Tag
       id: vars
       run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
@@ -33,9 +33,10 @@ jobs:
         echo ${{ steps.vars.outputs.tag }}
 
     - name: Use Node.js 16
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v6
       with:
-        node-version: '16'
+        #node-version: 'lts/krypton'
+        node-version-file: '.nvmrc'
         cache: 'npm'
 
     # Not using npm? Change `npm ci` to `yarn install` or `pnpm i`
@@ -45,15 +46,15 @@ jobs:
     # Not using npm? Change `npm run build` to `yarn build` or `pnpm run build`
     - name: Build MDWiki-ng
       run: ./build.sh
-    
+
     # Upload the index.html artifact for use later
     - name: Save index.html artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: mdwiki-output
         path: dist/index.html
         if-no-files-found: error
-  
+
   CreateRelease:
     name: Create GitHub Release
     runs-on: ubuntu-latest
@@ -61,16 +62,16 @@ jobs:
     steps:
     - name: Download mdwiki-output artifact
       id: download
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: mdwiki-output
-    
+
     - name: Show downloaded artifact
       run: ls -R
-        
+
     - name: Create Release With Asset
       id: Release-AIO
-      uses: Hs1r1us/Release-AIO@v1.0
+      uses: Hs1r1us/Release-AIO@v2.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
