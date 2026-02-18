@@ -71,7 +71,7 @@ jobs:
 
     - name: Create Release With Asset
       id: Release-AIO
-      uses: Hs1r1us/Release-AIO@v2.0
+      uses: Hs1r1us/Release-AIO@v2.0.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
