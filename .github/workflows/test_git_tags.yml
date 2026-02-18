@@ -1,0 +1,48 @@
+name: Test GitHub Tags
+
+on:
+  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  workflow_dispatch:
+
+# Allow this job to clone the repo and create a page deployment
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  test:
+    name: Test getting Tags and Tag Bodies
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+      tag_body: ${{ steps.get_tag_Body.outputs.tag_body }}
+
+    steps:
+    - name: Check out your repository using git
+      uses: actions/checkout@v6
+
+    - name: Get Tag
+      id: tag
+      #run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      #run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      #run: echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+      run: echo "tag=$(git tag -l --sort=-creatordate | head -n 1)" >> GITHUB_OUTPUT
+    - name: Check Tag
+      run: |
+        echo ${{ steps.tag.outputs.tag }}
+
+    - name: Get Tag Body
+      id: get_tag_Body
+      #run: echo "tag_body=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      shell: bash
+      run: |
+        # Use git tag -l with format to get the full contents (body)
+        TAG_BODY=$(git tag -l --format='%(contents)' "${{ steps.tag.outputs.tag }}")
+        # Set the tag body as a step output
+        echo "tag_body<<EOF" >> $GITHUB_OUTPUT
+        echo "$TAG_BODY" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Check Tag Body
+      run: |
+        echo ${{ steps.get_tag_Body.outputs.tag_body }}
