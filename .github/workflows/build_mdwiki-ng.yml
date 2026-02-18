@@ -41,7 +41,7 @@ jobs:
       shell: bash
       run: |
         # Use git tag -l with format to get the full contents (body)
-        TAG_BODY=$(git tag -l --format='%(contents)' "${{ steps.tag.outputs.tag }}"))
+        TAG_BODY=$(git tag -l --format='%(contents)' "${{ steps.tag.outputs.tag }}")
         # Set the tag body as a step output
         echo "tag_body<<EOF" >> $GITHUB_OUTPUT
         echo "$TAG_BODY" >> $GITHUB_OUTPUT
