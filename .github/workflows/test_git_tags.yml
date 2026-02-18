@@ -20,6 +20,9 @@ jobs:
     steps:
     - name: Check out your repository using git
       uses: actions/checkout@v6
+      with:
+        # Required to fetch tags; default is fetch-depth: 1 (no tags)
+        fetch-depth: 0
 
     - name: Get Tag
       id: tag
