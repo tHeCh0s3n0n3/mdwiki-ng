@@ -19,20 +19,39 @@ jobs:
     name: Build MDWiki and upload artifact
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.vars.outputs.tag }}
+      tag: ${{ steps.tag.outputs.tag }}
+      tag_body: ${{ steps.get_tag_Body.outputs.tag_body }}
 
     steps:
     - name: Check out your repository using git
       uses: actions/checkout@v6
 
     - name: Get Tag
-      id: vars
-      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      id: tag
+      #run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      #run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      run: echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
     - name: Check Tag
       run: |
-        echo ${{ steps.vars.outputs.tag }}
+        echo ${{ steps.tag.outputs.tag }}
 
-    - name: Use Node.js 16
+    - name: Get Tag Body
+      id: get_tag_Body
+      #run: echo "tag_body=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      shell: bash
+      run: |
+        # Use git tag -l with format to get the full contents (body)
+        TAG_BODY=$(git tag -l --format='%(contents)' "${{ steps.tag.outputs.tag }}"))
+        # Set the tag body as a step output
+        echo "tag_body<<EOF" >> $GITHUB_OUTPUT
+        echo "$TAG_BODY" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Check Tag Body
+      run: |
+        echo ${{ steps.get_tag_Body.outputs.tag_body }}
+
+    - name: Use Node.js (.nvmrc version)
       uses: actions/setup-node@v6
       with:
         #node-version: 'lts/krypton'
@@ -69,11 +88,34 @@ jobs:
     - name: Show downloaded artifact
       run: ls -R
 
-    - name: Create Release With Asset
-      id: Release-AIO
-      uses: Hs1r1us/Release-AIO@v2.0.0
+    - name: Create draft release
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{needs.build.outputs.tag }}
-        asset_files: index.html
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+      run: |
+        tag="${{ needs.build.outputs.tag }}"
+        body="${{ needs.build.outputs.tag_body }}"
+        gh release create --draft "$tag" --title "$tag" --notes "$body"
+
+    - name: Upload output to release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+      run:
+        gh release upload "${{ needs.build.outputs.tag }}" "index.html"
+
+    - name: Publish release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+      run:
+        gh release edit "${{ needs.build.outputs.tag }}" --draft=false
+
+    #- name: Create Release With Asset
+    #  id: Release-AIO
+    #  uses: Hs1r1us/Release-AIO@v2.0.0
+    #  env:
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #  with:
+    #    tag_name: ${{needs.build.outputs.tag }}
+    #    asset_files: index.html
