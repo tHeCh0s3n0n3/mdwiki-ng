@@ -1,6 +1,6 @@
 {
   "name": "mdwiki-ng",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "MDWiki - Next Generation",
   "main": "main.js",
   "scripts": {
