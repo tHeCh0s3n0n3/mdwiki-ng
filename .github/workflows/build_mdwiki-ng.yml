@@ -30,7 +30,13 @@ jobs:
       id: tag
       #run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       #run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-      run: echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+      #run: echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+      run: |
+        # Find the latest tag reachable from the current commit
+        LATEST_TAG=$(git describe --tags --abbrev=0)
+        echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+        # Also set as environment variable for subsequent steps in THIS job
+        echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
     - name: Check Tag
       run: |
         echo ${{ steps.tag.outputs.tag }}
@@ -46,6 +52,7 @@ jobs:
         echo "tag_body<<EOF" >> $GITHUB_OUTPUT
         echo "$TAG_BODY" >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
+        echo "TAG_BODY=$TAG_BODY" >> GITHUB_ENV
 
     - name: Check Tag Body
       run: |
