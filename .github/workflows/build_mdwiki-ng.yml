@@ -55,7 +55,7 @@ jobs:
         echo "tag_body<<EOF" >> $GITHUB_OUTPUT
         echo "$TAG_BODY" >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
-        echo "TAG_BODY=$TAG_BODY" >> GITHUB_ENV
+        echo "TAG_BODY=$TAG_BODY" >> $GITHUB_ENV
 
     - name: Check Tag Body
       run: |
@@ -74,7 +74,7 @@ jobs:
 
     # Not using npm? Change `npm run build` to `yarn build` or `pnpm run build`
     - name: Build MDWiki-ng
-      run: ./build.sh
+      run: bash ./build.sh
 
     # Upload the index.html artifact for use later
     - name: Save index.html artifact
